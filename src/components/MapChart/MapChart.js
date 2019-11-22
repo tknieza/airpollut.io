@@ -6,7 +6,8 @@ import {
   Geographies,
   Geography,
   Sphere,
-  Graticule
+  Graticule,
+  ZoomableGroup
 } from "react-simple-maps";
 
 import dataCSV from "./data.csv";
@@ -34,24 +35,26 @@ const MapChart = () => {
         scale: 147
       }}
     >
-      <Sphere stroke="#E4E5E6" strokeWidth={0.5} />
-      <Graticule stroke="#E4E5E6" strokeWidth={0.5} />
-      {data.length > 0 && (
-        <Geographies geography={geoUrl}>
-          {({ geographies }) =>
-            geographies.map(geo => {
-              const d = data.find(s => s.ISO3 == geo.properties.ISO_A3);
-              return (
-                <Geography
-                  key={geo.rsmKey}
-                  geography={geo}
-                  fill={d ? colorScale(d["2017"]) : "#F5F4F6"}
-                />
-              );
-            })
-          }
-        </Geographies>
-      )}
+      <ZoomableGroup zoom={1}>
+        <Sphere stroke="#E4E5E6" strokeWidth={0.5} />
+        <Graticule stroke="#E4E5E6" strokeWidth={0.5} />
+        {data.length > 0 && (
+          <Geographies geography={geoUrl}>
+            {({ geographies }) =>
+              geographies.map(geo => {
+                const d = data.find(s => s.ISO3 == geo.properties.ISO_A3);
+                return (
+                  <Geography
+                    key={geo.rsmKey}
+                    geography={geo}
+                    fill={d ? colorScale(d["2017"]) : "#F5F4F6"}
+                  />
+                );
+              })
+            }
+          </Geographies>
+        )}
+      </ZoomableGroup>
     </ComposableMap>
   );
 };

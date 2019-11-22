@@ -15,7 +15,7 @@ An overview of pollution levels around the world.
 Download to your project directory, add `README.md`, and commit:
 
 ```sh
-git clone https://github.com/tknieza/airpollut.io/
+git clone https://github.com/tknieza/airpollut.io.git
 cd airpollut.io
 npm i
 npm start
