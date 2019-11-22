@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import { csv } from "d3-fetch";
 import { scaleLinear } from "d3-scale";
 import {
@@ -19,7 +19,7 @@ const colorScale = scaleLinear()
   .domain([0.29, 0.68])
   .range(["#ffedea", "#ff5233"]);
 
-const MapChart = () => {
+const MapChart = ({ setTooltipContent }) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -30,6 +30,7 @@ const MapChart = () => {
 
   return (
     <ComposableMap
+      data-tip=""
       projectionConfig={{
         rotate: [-10, 0, 0],
         scale: 147
@@ -45,6 +46,13 @@ const MapChart = () => {
                 const d = data.find(s => s.ISO3 == geo.properties.ISO_A3);
                 return (
                   <Geography
+                    onMouseEnter={() => {
+                      const { NAME, POP_EST } = geo.properties;
+                      setTooltipContent(`${NAME} — ${POP_EST}`);
+                    }}
+                    onMouseLeave={() => {
+                      setTooltipContent("");
+                    }}
                     key={geo.rsmKey}
                     geography={geo}
                     fill={d ? colorScale(d["2017"]) : "#F5F4F6"}
@@ -59,4 +67,4 @@ const MapChart = () => {
   );
 };
 
-export default MapChart;
+export default memo(MapChart);
